@@ -1,0 +1,217 @@
+site_name: 'Project "Piper": Continuous Delivery for the SAP Ecosystem'
+nav:
+    - 'Home': index.md
+    - 'Getting Started With Project "Piper"' : guidedtour.md
+    - 'Configuration': configuration.md
+    - 'Infrastructure':
+        - 'Overview': infrastructure/overview.md
+        - 'Custom Jenkins Setup': infrastructure/customjenkins.md
+        - 'Vault For Pipline Secrets': infrastructure/vault.md
+        - 'Fixing docker rate limit': infrastructure/docker-rate-limit.md
+    - 'Pipelines':
+        - 'ABAP Environment pipeline':
+            - 'Introduction': pipelines/abapEnvironment/introduction.md
+            - 'Configuration': pipelines/abapEnvironment/configuration.md
+            - 'Extensibility': pipelines/abapEnvironment/extensibility.md
+            - 'Stages':
+              - 'Initial Checks': pipelines/abapEnvironment/stages/initialChecks.md
+              - 'Prepare System': pipelines/abapEnvironment/stages/prepareSystem.md
+              - 'Clone Repositories': pipelines/abapEnvironment/stages/cloneRepositories.md
+              - 'Test': pipelines/abapEnvironment/stages/test.md
+              - 'Build': pipelines/abapEnvironment/stages/build.md
+              - 'Integration Tests': pipelines/abapEnvironment/stages/integrationTest.md
+              - 'Confirm': pipelines/abapEnvironment/stages/confirm.md
+              - 'Publish': pipelines/abapEnvironment/stages/publish.md
+              - 'Post': pipelines/abapEnvironment/stages/post.md
+        - 'General purpose pipeline':
+            - 'Introduction': stages/introduction.md
+            - 'Examples': stages/examples.md
+            - 'Stages':
+                - 'Init Stage': stages/init.md
+                - 'Pull-Request Voting Stage': stages/prvoting.md
+                - 'Build Stage': stages/build.md
+                - 'Additional Unit Test Stage': stages/additionalunittests.md
+                - 'Integration Stage': stages/integration.md
+                - 'Acceptance Stage': stages/acceptance.md
+                - 'Security Stage': stages/security.md
+                - 'Performance Stage': stages/performance.md
+                - 'Compliance': stages/compliance.md
+                - 'Confirm Stage': stages/confirm.md
+                - 'Promote Stage': stages/promote.md
+                - 'Release Stage': stages/release.md
+    - 'Scenarios':
+        - 'Build and Deploy Hybrid Applications with SAP Solution Manager': scenarios/changeManagement.md
+        - 'Build and Deploy SAPUI5/SAP Fiori Applications on SAP BTP': scenarios/ui5-sap-cp/Readme.md
+        - 'Build and Deploy SAP Cloud Application Programming Model Applications': scenarios/CAP_Scenario.md
+        - 'Integrate SAP Cloud Transport Management Into Your CI/CD Pipeline': scenarios/TMS_Extension.md
+        - 'Build and Deploy SAP Fiori Applications on SAP HANA Extended Application Services, Advanced Model': scenarios/xsa-deploy/Readme.md
+        - 'Build an SAP Fiori Application and Attach It to a Transport Request on an ABAP System': scenarios/upload-to-transportrequest/Readme.md
+        - 'Build and Publish Add-on Products on SAP BTP, ABAP Environment': scenarios/abapEnvironmentAddons.md
+        - 'Continuous Testing on SAP BTP, ABAP Environment': scenarios/abapEnvironmentTest.md
+        - 'Set up a Pipeline-Based ABAP Development and Testing Process Using Git-Enabled Change and Transport System': scenarios/gCTS_Scenario.md
+    - Extensibility: extensibility.md
+    - 'Library steps':
+        - abapAddonAssemblyKitCheckCVs: steps/abapAddonAssemblyKitCheckCVs.md
+        - abapAddonAssemblyKitCheckPV: steps/abapAddonAssemblyKitCheckPV.md
+        - abapAddonAssemblyKitCreateTargetVector: steps/abapAddonAssemblyKitCreateTargetVector.md
+        - abapAddonAssemblyKitPublishTargetVector: steps/abapAddonAssemblyKitPublishTargetVector.md
+        - abapAddonAssemblyKitRegisterPackages: steps/abapAddonAssemblyKitRegisterPackages.md
+        - abapAddonAssemblyKitReleasePackages: steps/abapAddonAssemblyKitReleasePackages.md
+        - abapAddonAssemblyKitReserveNextPackages: steps/abapAddonAssemblyKitReserveNextPackages.md
+        - abapEnvironmentBuild: steps/abapEnvironmentBuild.md
+        - abapEnvironmentAssemblePackages: steps/abapEnvironmentAssemblePackages.md
+        - abapEnvironmentAssembleConfirm: steps/abapEnvironmentAssembleConfirm.md
+        - abapEnvironmentCheckoutBranch: steps/abapEnvironmentCheckoutBranch.md
+        - abapEnvironmentCloneGitRepo: steps/abapEnvironmentCloneGitRepo.md
+        - abapEnvironmentCreateSystem: steps/abapEnvironmentCreateSystem.md
+        - abapEnvironmentCreateTag: steps/abapEnvironmentCreateTag.md
+        - abapEnvironmentPullGitRepo: steps/abapEnvironmentPullGitRepo.md
+        - abapEnvironmentPushATCSystemConfig: steps/abapEnvironmentPushATCSystemConfig.md
+        - abapEnvironmentRunATCCheck: steps/abapEnvironmentRunATCCheck.md
+        - abapEnvironmentRunAUnitTest: steps/abapEnvironmentRunAUnitTest.md
+        - apiKeyValueMapDownload: steps/apiKeyValueMapDownload.md
+        - apiKeyValueMapUpload: steps/apiKeyValueMapUpload.md
+        - apiProxyDownload: steps/apiProxyDownload.md
+        - apiProxyList: steps/apiProxyList.md
+        - apiProviderDownload: steps/apiProviderDownload.md
+        - apiProviderList: steps/apiProviderList.md
+        - apiProviderUpload: steps/apiProviderUpload.md
+        - apiProxyUpload: steps/apiProxyUpload.md
+        - artifactPrepareVersion: steps/artifactPrepareVersion.md
+        - awsS3Upload: steps/awsS3Upload.md
+        - azureBlobUpload: steps/azureBlobUpload.md
+        - batsExecuteTests: steps/batsExecuteTests.md
+        - buildExecute: steps/buildExecute.md
+        - checkmarxExecuteScan: steps/checkmarxExecuteScan.md
+        - checksPublishResults: steps/checksPublishResults.md
+        - cfManifestSubstituteVariables: steps/cfManifestSubstituteVariables.md
+        - cloudFoundryCreateService: steps/cloudFoundryCreateService.md
+        - cloudFoundryCreateServiceKey: steps/cloudFoundryCreateServiceKey.md
+        - cloudFoundryDeleteService: steps/cloudFoundryDeleteService.md
+        - cloudFoundryDeploy: steps/cloudFoundryDeploy.md
+        - cnbBuild: steps/cnbBuild.md
+        - codeqlExecuteScan: steps/codeqlExecuteScan.md
+        - commonPipelineEnvironment: steps/commonPipelineEnvironment.md
+        - containerExecuteStructureTests: steps/containerExecuteStructureTests.md
+        - containerPushToRegistry: steps/containerPushToRegistry.md
+        - debugReportArchive: steps/debugReportArchive.md
+        - detectExecuteScan: steps/detectExecuteScan.md
+        - dockerExecute: steps/dockerExecute.md
+        - dockerExecuteOnKubernetes: steps/dockerExecuteOnKubernetes.md
+        - dubExecute: steps/dubExecute.md
+        - durationMeasure: steps/durationMeasure.md
+        - fortifyExecuteScan: steps/fortifyExecuteScan.md
+        - gatlingExecuteTests: steps/gatlingExecuteTests.md
+        - gaugeExecuteTests: steps/gaugeExecuteTests.md
+        - gctsCloneRepository: steps/gctsCloneRepository.md
+        - gctsCreateRepository: steps/gctsCreateRepository.md
+        - gctsDeploy: steps/gctsDeploy.md
+        - gctsExecuteABAPQualityChecks: steps/gctsExecuteABAPQualityChecks.md
+        - gctsRollback: steps/gctsRollback.md
+        - githubCheckBranchProtection: steps/githubCheckBranchProtection.md
+        - githubCommentIssue: steps/githubCommentIssue.md
+        - githubCreateIssue: steps/githubCreateIssue.md
+        - githubCreatePullRequest: steps/githubCreatePullRequest.md
+        - githubPublishRelease: steps/githubPublishRelease.md
+        - githubSetCommitStatus: steps/githubSetCommitStatus.md
+        - gitopsUpdateDeployment: steps/gitopsUpdateDeployment.md
+        - gradleExecuteBuild: steps/gradleExecuteBuild.md
+        - hadolintExecute: steps/hadolintExecute.md
+        - handlePipelineStepErrors: steps/handlePipelineStepErrors.md
+        - healthExecuteCheck: steps/healthExecuteCheck.md
+        - helmExecute: steps/helmExecute.md
+        - influxWriteData: steps/influxWriteData.md
+        - integrationArtifactDeploy: steps/integrationArtifactDeploy.md
+        - integrationArtifactDownload: steps/integrationArtifactDownload.md
+        - integrationArtifactGetMplStatus: steps/integrationArtifactGetMplStatus.md
+        - integrationArtifactGetServiceEndpoint: steps/integrationArtifactGetServiceEndpoint.md
+        - integrationArtifactResource: steps/integrationArtifactResource.md
+        - integrationArtifactUnDeploy: steps/integrationArtifactUnDeploy.md
+        - integrationArtifactUpdateConfiguration: steps/integrationArtifactUpdateConfiguration.md
+        - integrationArtifactUpload: steps/integrationArtifactUpload.md
+        - isChangeInDevelopment: steps/isChangeInDevelopment.md
+        - jenkinsMaterializeLog: steps/jenkinsMaterializeLog.md
+        - kanikoExecute: steps/kanikoExecute.md
+        - karmaExecuteTests: steps/karmaExecuteTests.md
+        - kubernetesDeploy: steps/kubernetesDeploy.md
+        - mailSendNotification: steps/mailSendNotification.md
+        - malwareExecuteScan: steps/malwareExecuteScan.md
+        - mavenBuild: steps/mavenBuild.md
+        - mavenExecute: steps/mavenExecute.md
+        - mavenExecuteIntegration: steps/mavenExecuteIntegration.md
+        - mavenExecuteStaticCodeChecks: steps/mavenExecuteStaticCodeChecks.md
+        - mtaBuild: steps/mtaBuild.md
+        - multicloudDeploy: steps/multicloudDeploy.md
+        - neoDeploy: steps/neoDeploy.md
+        - newmanExecute: steps/newmanExecute.md
+        - nexusUpload: steps/nexusUpload.md
+        - npmExecuteEndToEndTests: steps/npmExecuteEndToEndTests.md
+        - npmExecuteLint: steps/npmExecuteLint.md
+        - npmExecuteScripts: steps/npmExecuteScripts.md
+        - pipelineExecute: steps/pipelineExecute.md
+        - pipelineRestartSteps: steps/pipelineRestartSteps.md
+        - pipelineStashFiles: steps/pipelineStashFiles.md
+        - pipelineStashFilesAfterBuild: steps/pipelineStashFilesAfterBuild.md
+        - pipelineStashFilesBeforeBuild: steps/pipelineStashFilesBeforeBuild.md
+        - piperLoadGlobalExtensions: steps/piperLoadGlobalExtensions.md
+        - piperPublishWarnings: steps/piperPublishWarnings.md
+        - prepareDefaultValues: steps/prepareDefaultValues.md
+        - protecodeExecuteScan: steps/protecodeExecuteScan.md
+        - pythonBuild: steps/pythonBuild.md
+        - seleniumExecuteTests: steps/seleniumExecuteTests.md
+        - setupCommonPipelineEnvironment: steps/setupCommonPipelineEnvironment.md
+        - shellExecute: steps/shellExecute.md
+        - slackSendNotification: steps/slackSendNotification.md
+        - snykExecute: steps/snykExecute.md
+        - sonarExecuteScan: steps/sonarExecuteScan.md
+        - spinnakerTriggerPipeline: steps/spinnakerTriggerPipeline.md
+        - testsPublishResults: steps/testsPublishResults.md
+        - tmsUpload: steps/tmsUpload.md
+        - transportRequestDocIDFromGit: steps/transportRequestDocIDFromGit.md
+        - transportRequestReqIDFromGit: steps/transportRequestReqIDFromGit.md
+        - transportRequestUploadCTS: steps/transportRequestUploadCTS.md
+        - transportRequestUploadRFC: steps/transportRequestUploadRFC.md
+        - transportRequestUploadSOLMAN: steps/transportRequestUploadSOLMAN.md
+        - uiVeri5ExecuteTests: steps/uiVeri5ExecuteTests.md
+        - vaultRotateSecretId: steps/vaultRotateSecretId.md
+        - whitesourceExecuteScan: steps/whitesourceExecuteScan.md
+        - writeTemporaryCredentials: steps/writeTemporaryCredentials.md
+        - xsDeploy: steps/xsDeploy.md
+    - 'Library Steps (deprecated)':
+        - artifactSetVersion: steps/artifactSetVersion.md
+        - checkChangeInDevelopment: steps/checkChangeInDevelopment.md
+        - npmExecute: steps/npmExecute.md
+        - transportRequestCreate: steps/transportRequestCreate.md
+        - transportRequestRelease:  steps/transportRequestRelease.md
+        - transportRequestUploadFile: steps/transportRequestUploadFile.md
+        - gctsExecuteABAPUnitTests: steps/gctsExecuteABAPUnitTests.md
+    - 'Command line tool': cli/index.md
+
+theme:
+    name: 'material'
+    palette:
+      primary: 'teal'
+      accent: 'purple'
+    logo: 'images/piper_400_white.png'
+    favicon: 'images/favicon.ico'
+extra:
+    font:
+      text: 'Slabo 13px'
+      code: 'Ubuntu Mono'
+markdown_extensions:
+    - admonition
+    - attr_list
+    - codehilite:
+        guess_lang: false
+    - toc:
+        permalink: true
+    - footnotes
+    - pymdownx.superfences
+    - pymdownx.tabbed:
+        alternate_style: true 
+    - pymdownx.details
+extra_css:
+    - 'css/extra.css'
+edit_uri: edit/master/documentation/docs
+site_dir: docs-gen
+repo_url: https://github.com/SAP/jenkins-library

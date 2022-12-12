@@ -1,0 +1,177 @@
+metadata:
+  name: npmExecuteScripts
+  aliases:
+    - name: executeNpm
+  description: Execute npm run scripts on all npm packages in a project
+  longDescription: |
+    Execute npm run scripts in all package json files, if they implement the scripts.
+
+    ### build with depedencies from a private repository
+    if your build has scoped/unscoped dependencies from a private repository you can include a .npmrc into the source code
+    repository as below (replace the `@privateScope:registry` value(s) with a valid private repo url) :
+
+    ```
+    @privateScope:registry=https://private.repository.com/
+    //private.repository.com/:username=${PIPER_VAULTCREDENTIAL_USER}
+    //private.repository.com/:_password=${PIPER_VAULTCREDENTIAL_PASSWORD_BASE64}
+    //private.repository.com/:always-auth=true
+    registry=https://registry.npmjs.org
+    ```
+    `PIPER_VAULTCREDENTIAL_USER` and `PIPER_VAULTCREDENTIAL_PASSWORD_BASE64` (Base64 encoded password) are the username and password for the private repository
+    and are exposed are environment variables that must be present in the environment where the Piper step runs or alternatively can be created using :
+    [vault general purpose credentials](../infrastructure/vault.md#using-vault-for-general-purpose-and-test-credentials)
+spec:
+  inputs:
+    resources:
+      - name: source
+        type: stash
+    params:
+      - name: install
+        type: bool
+        description: Run npm install or similar commands depending on the project structure.
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        default: true
+      - name: runScripts
+        type: "[]string"
+        description: List of additional run scripts to execute from package.json.
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+      - name: defaultNpmRegistry
+        type: string
+        description: URL of the npm registry to use. Defaults to https://registry.npmjs.org/
+        scope:
+          - PARAMETERS
+          - GENERAL
+          - STAGES
+          - STEPS
+        aliases:
+          - name: npm/defaultNpmRegistry
+      - name: virtualFrameBuffer
+        type: bool
+        description: (Linux only) Start a virtual frame buffer in the background. This allows you to run a web browser without the need for an X server. Note that xvfb needs to be installed in the execution environment.
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+      - name: scriptOptions
+        type: "[]string"
+        description: Options are passed to all runScripts calls separated by a '--'. './piper npmExecuteScripts --runScripts ci-e2e --scriptOptions '--tag1' will correspond to 'npm run ci-e2e -- --tag1'
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+      - name: buildDescriptorExcludeList
+        type: "[]string"
+        description: List of build descriptors and therefore modules to exclude from execution of the npm scripts. The elements can either be a path to the build descriptor or a pattern.
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        default: ["deployment/**"]
+      - name: buildDescriptorList
+        type: "[]string"
+        description: List of build descriptors and therefore modules for execution of the npm scripts. The elements have to be paths to the build descriptors. **If set, buildDescriptorExcludeList will be ignored.**
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+      - name: createBOM
+        type: bool
+        description: Create a BOM xml using CycloneDX.
+        scope:
+          - GENERAL
+          - STEPS
+          - STAGES
+          - PARAMETERS
+        default: false
+      - name: publish
+        type: bool
+        description: Configures npm to publish the artifact to a repository.
+        scope:
+          - STEPS
+          - STAGES
+          - PARAMETERS
+      - name: repositoryUrl
+        type: string
+        description: Url to the repository to which the project artifacts should be published.
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/npmRepositoryURL
+          - name: commonPipelineEnvironment
+            param: custom/repositoryUrl
+      - name: repositoryPassword
+        type: string
+        description: Password for the repository to which the project artifacts should be published.
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        secret: true
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/npmRepositoryPassword
+          - name: commonPipelineEnvironment
+            param: custom/repositoryPassword
+      - name: repositoryUsername
+        type: string
+        description: Username for the repository to which the project artifacts should be published.
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        secret: true
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/npmRepositoryUsername
+          - name: commonPipelineEnvironment
+            param: custom/repositoryUsername
+      - name: buildSettingsInfo
+        type: string
+        description: build settings info is typically filled by the step automatically to create information about the build settings that were used during the npm build . This information is typically used for compliance related processes.
+        scope:
+          - STEPS
+          - STAGES
+          - PARAMETERS
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/buildSettingsInfo
+      - name: packBeforePublish
+        type: bool
+        default: false
+        description: used for executing npm pack first, followed by npm publish. This two step maybe required when you are building a scoped packages and have npm dependencies from the same scope
+        scope:
+          - STEPS
+          - STAGES
+          - PARAMETERS
+  outputs:
+    resources:
+      - name: commonPipelineEnvironment
+        type: piperEnvironment
+        params:
+          - name: custom/buildSettingsInfo
+      - name: reports
+        type: reports
+        params:
+          - filePattern: "**/bom-npm.xml"
+            type: sbom
+          - filePattern: "**/TEST-*.xml"
+            type: junit
+          - filePattern: "**/cobertura-coverage.xml"
+            type: cobertura-coverage
+          - filePattern: "**/e2e/*.json"
+            type: cucumber
+  containers:
+    - name: node
+      image: node:lts-buster

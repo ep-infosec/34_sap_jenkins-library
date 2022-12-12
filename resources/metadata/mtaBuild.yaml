@@ -1,0 +1,249 @@
+metadata:
+  name: mtaBuild
+  description: Performs an mta build
+  longDescription: |
+    Executes the SAP Multitarget Application Archive Builder to create an mtar archive of the application.
+    ### build with depedencies from a private repository
+    1. For maven related settings refer [maven build dependencies](./mavenBuild.md#build-with-depedencies-from-a-private-repository)
+    2. For NPM related settings refer [NPM build dependencies](./npmExecuteScripts.md#build-with-depedencies-from-a-private-repository)
+spec:
+  inputs:
+    params:
+      - name: mtarName
+        type: string
+        description: "The name of the generated mtar file including its extension."
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default:
+      - name: mtarGroup
+        type: string
+        description: "The group to which the mtar artifact will be uploaded. Required when publish is True."
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default:
+      - name: version
+        aliases:
+          - name: artifactVersion
+        type: string
+        description: Version of the mtar artifact
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: artifactVersion
+      - name: extensions
+        type: string
+        description: "The path to the extension descriptor file."
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default:
+        aliases:
+          - name: extension
+      - name: jobs
+        type: int
+        description: "Configures the number of Make jobs that can run simultaneously. Maximum value allowed is 8"
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default:
+        aliases:
+          - name: jobs
+      - name: platform
+        type: string
+        description: "The target platform to which the mtar can be deployed."
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default: CF
+        possibleValues:
+          - CF
+          - NEO
+          - XSA
+      - name: applicationName
+        type: string
+        description: "The name of the application which is being built. If the parameter has been provided and no `mta.yaml` exists, the `mta.yaml` will be automatically generated using this parameter and the information (`name` and `version`) from 'package.json` before the actual build starts."
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default:
+      - name: source
+        type: string
+        description: "The path to the MTA project."
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default: "./"
+      - name: target
+        type: string
+        description: "The folder for the generated `MTAR` file. If the parameter has been provided, the `MTAR` file is saved in the root of the folder provided by the argument."
+        scope:
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        default: "./"
+      - name: defaultNpmRegistry
+        type: string
+        description: "Url to the npm registry that should be used for installing npm dependencies."
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        aliases:
+          - name: npm/defaultNpmRegistry
+        default:
+      - name: projectSettingsFile
+        type: string
+        description: "Path or url to the mvn settings file that should be used as project settings file."
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        aliases:
+          - name: maven/projectSettingsFile
+      - name: globalSettingsFile
+        type: string
+        description: "Path or url to the mvn settings file that should be used as global settings file"
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        mandatory: false
+        aliases:
+          - name: maven/globalSettingsFile
+      - name: m2Path
+        type: string
+        description: Path to the location of the local repository that should be used.
+        scope:
+          - GENERAL
+          - STEPS
+          - STAGES
+          - PARAMETERS
+        mandatory: false
+        aliases:
+          - name: maven/m2Path
+      - name: installArtifacts
+        type: bool
+        description: "If enabled, for npm packages this step will install all dependencies including dev dependencies. For maven it will install all artifacts to the local maven repository. Note: This happens _after_ mta build was done. The default mta build tool does not install dev-dependencies as part of the process. If you require dev-dependencies for building the mta, you will need to use a [custom builder](https://sap.github.io/cloud-mta-build-tool/configuration/#configuring-the-custom-builder)"
+        scope:
+          - GENERAL
+          - STEPS
+          - STAGES
+          - PARAMETERS
+      - name: mtaDeploymentRepositoryPassword
+        type: string
+        description: Password for the alternative deployment repository to which mtar artifacts will be publised
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        secret: true
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/mavenRepositoryPassword
+          - name: commonPipelineEnvironment
+            param: custom/repositoryPassword
+          - name: mtaDeploymentRepositoryPasswordId
+            type: secret
+          - type: vaultSecretFile
+            name: mtaDeploymentRepositoryPasswordFileVaultSecretName
+            default: mta-deployment-repository-passowrd
+      - name: mtaDeploymentRepositoryUser
+        type: string
+        description: User for the alternative deployment repository to which which mtar artifacts will be publised
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/mavenRepositoryUsername
+          - name: commonPipelineEnvironment
+            param: custom/repositoryUsername
+      - name: mtaDeploymentRepositoryUrl
+        type: string
+        description: Url for the alternative deployment repository to which mtar artifacts will be publised
+        scope:
+          - GENERAL
+          - PARAMETERS
+          - STAGES
+          - STEPS
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/mavenRepositoryURL
+          - name: commonPipelineEnvironment
+            param: custom/repositoryUrl
+      - name: publish
+        type: bool
+        description: pushed mtar artifact to altDeploymentRepositoryUrl/altDeploymentRepositoryID when set to true
+        scope:
+          - STEPS
+          - STAGES
+          - PARAMETERS
+        default: false
+        aliases:
+          - name: mta/publish
+      - name: profiles
+        type: "[]string"
+        description: Defines list of maven build profiles to be used. profiles will overwrite existing values in the global settings xml at $M2_HOME/conf/settings.xml
+        scope:
+          - PARAMETERS
+          - GENERAL
+          - STAGES
+          - STEPS
+      - name: buildSettingsInfo
+        type: string
+        description: build settings info is typically filled by the step automatically to create information about the build settings that were used during the mta build . This information is typically used for compliance related processes.
+        scope:
+          - STEPS
+          - STAGES
+          - PARAMETERS
+        resourceRef:
+          - name: commonPipelineEnvironment
+            param: custom/buildSettingsInfo
+  outputs:
+    resources:
+      - name: commonPipelineEnvironment
+        type: piperEnvironment
+        params:
+          - name: mtarFilePath
+          - name: custom/mtaBuildToolDesc
+          - name: custom/mtarPublishedUrl
+          - name: custom/buildSettingsInfo
+      - name: reports
+        type: reports
+        params:
+          - filePattern: "**/TEST-*.xml"
+            type: junit
+          - filePattern: "**/cobertura-coverage.xml"
+            type: cobertura-coverage
+          - filePattern: "**/jacoco.xml"
+            type: jacoco-coverage
+  containers:
+    - image: devxci/mbtci-java11-node14

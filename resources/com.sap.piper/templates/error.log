@@ -1,0 +1,21 @@
+----------------------------------------------------------
+--- An error occurred in the library step: ${stepName}
+----------------------------------------------------------
+
+The following parameters were available to the step:
+***
+${stepParameters}
+***
+
+The error was:
+***
+${error}
+***
+
+Further information:
+* Documentation of library step ${stepName}: ${libraryDocumentationUrl}steps/${stepName}/
+* Source code of library step ${stepName}: ${libraryRepositoryUrl}blob/master/vars/${stepName}.groovy
+* Library documentation: ${libraryDocumentationUrl}
+* Library repository: ${libraryRepositoryUrl}
+
+----------------------------------------------------------
